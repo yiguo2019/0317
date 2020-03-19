@@ -6,54 +6,59 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
-    <title>购买ESCH</title>
-     <link href="Css/mobilemain.css" rel="stylesheet" />
-    <script src="JS/jquery.js"></script>
-    <script src="JS/web3.js"></script>
-    <script src="JS/public.js"></script>
+    <title>Buy tokens</title>
+     <link href="../Css/mobilemain.css" rel="stylesheet" />
+    <script src="../JS/jquery.js"></script>
+    <script src="../JS/public.js"></script>
+    <script src="../JS/web3.min.js"></script>
+             <script type="text/javascript">
+                 function copyUrl2() {
+                     var Url2 = document.getElementById("account").innerText;
+                     var oInput = document.createElement('input');
+                     oInput.value = Url2;
+                     document.body.appendChild(oInput);
+                     oInput.select(); // 选择对象
+                     document.execCommand("Copy"); // 执行浏览器复制命令
+                     oInput.className = 'oInput';
+                     oInput.style.display = 'none';
+                     alert('ReplicatingSuccess');
+                 }
+</script>
 </head>
 <body>
   <div class="wrap">
             <div class="main">
                 <div class="staus_name">
                     <span><a href="index.html">
-                        <img src="Images/jt_left.png" height="20px" /></a></span>购买ESCH
+                        <img src="../Images/jt_left.png" height="20px" /></a></span>Buy tokens
                 </div>
                 <div class="es_hybox">
-    <div class="ES_hytitle1">0.1ETH起购，兑换比例1：1000</div>
-        
+    <div class="ES_hytitle1">Starting from 0.1ETH, the exchange ratio is 1:1000</div>
+       
             </div>
                 <div class="es_hybox1">
-                            <div class="ES_hytitle4">您的收款地址是：
-                                <span class="title" id="account"> </span>
+                            <div class="ES_hytitle4">Address：
+                                <span class="title" id="account" cols="20"></span>
+                                <input type="button" class="botton_title_name" onclick="copyUrl2()" value="ClickCopyCode" />
                             </div>
         
-         <div class="ES_hytitle3"><label>请输入数量：</label>
-        <input type="text" id="jeAccount" placeholder="ETH" value="" class="botton_acc"></div>
+         <div class="ES_hytitle3"><label>Quantity：</label>
+        <input type="text" placeholder="ETH" id="jeAccount" value="" class="botton_acc"></div>
         
         </div>
-                <div class="ES_hytitle3">
-                    <label>燃料单价(GWei)</label>
-                    <select id="gasPrice" class="botton_acc1">
-                        <option value="6">6</option>
-                        <option value="15">15</option>
-                        <option value="gasPrice">实时</option>
-                    </select>
-        </div>
 <div style="margin:auto; text-align:center; margin:15px 0px;">
-        <button onclick="joinon()" style="border:none; background:none;  border-radius:5px;width:80%; margin:auto;  color:#fff;text-align:center; background-color:#2886cf; height:35px; line-height:35px;">发送</button></div>
+        <button onclick="joinon()" style="border:none; background:none;  border-radius:5px;width:80%; margin:auto;  color:#fff;text-align:center; background-color:#2886cf; height:35px; line-height:35px;">Send</button></div>
 <h2 id="info"></h2>
                 
         </div>
     </div>
 <script>
-    //window.addEventListener('load', function () {
+    window.addEventListener('load', function () {
 
-$(function(){
 
         web3.eth.getAccounts(function (err, accounts) {
             if (accounts.length == 0) {
-                $("#account").html("请解锁！");
+                $("#account").html("Please unlock!");
             } else {
                 $("#account").html(accounts[0]);
                 login(accounts[0]);
@@ -82,23 +87,22 @@ $(function(){
 
         var je = $('#jeAccount').val();
         var gas = 2000000;
-        var gasPrice = $('#gasPrice').val();
-        gasPrice = gasPrice * 1000000000;
+        var gasPrice = 6 * 1000000000
         AthenaToken.gm.sendTransaction({ value: web3.toWei(je, 'ether'), gas: gas, gasPrice: gasPrice },
             function (err, res) {
                 var output = "";
                 if (!err) {
-                    $("#info").html("发送成功！等待区块确认... ");
+                    $("#info").html("Successful delivery! Waiting for block confirmation...");
 
                 } else {
-                    $("#info").html("请检查... ");
+                    $("#info").html("Please check the... ");
                 }
 
             });
 
 
     }</script>
-    <script src="JS/FT_zh.js"></script>
+    
 </body>
 </html>
 
