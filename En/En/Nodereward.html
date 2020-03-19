@@ -6,12 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
-    <title>节点奖励</title>
-    <link href="Css/mobilemain.css" rel="stylesheet" />
-     <script src="JS/jquery.js"></script>
-    <script src="JS/web3.min.js"></script>
-    <script src="JS/public.js"></script>
-   
+    <title>Node reward</title>
+    <link href="../Css/mobilemain.css" rel="stylesheet" />
+     <script src="../JS/jquery.js"></script>
+    <script src="../JS/web3.min.js"></script>
+    <script src="../JS/public.js"></script>
+
     
 </head>
 <body style="background-color: #f4f4f4">
@@ -21,14 +21,13 @@
                 <div class="ES_nodebg">
                     <div class="none_name">
                         <span><a href="index.html">
-                            <img src="Images/jt_left.png" height="20px" /></a></span>节点奖励
-                        <a href="SQAndLY.html" style="position: absolute;right: 0;color: #eee;">社区申请及留言</a>
+                            <img src="../Images/jt_left.png" height="20px" /></a></span>Node reward
+                        <a href="SQAndLY.html" style="position: absolute;right: 0;color: #eee;">Community</a>
                     </div>
                     <div class="none_etcbox">
                         <div class="title1">
-                            <span id="yj"></span>
-                            <font>ETH</font></div>
-                        <div class="title2">我的节点业绩ETH</div>
+                           <span id="yj"></span><font>ETH</font></div>
+                        <div class="title2">My node performance ETH</div>
                     </div>
                     <div class="none_etcboxleft" style="display:none;">
                         <div class="title1">235653565.5<font>EHT</font></div>
@@ -42,16 +41,16 @@
                 </div>
                 <div class="my_share">
                     <span id="childcount"></span>
-                    我的分享
+                     My Share
                 </div>
                 <div >
                     <table class="reward_list">
                         <tr>
-                            <td class="table_name_eth">可领奖励</td>
-                            <td class="table_name_eth">已领取</td>
-                            <td class="table_name_eth">未领取</td>
+                            <td class="table_name_eth">Can receive</td>
+                            <td class="table_name_eth">Received</td>
+                            <td class="table_name_eth">unaccalimed</td>
                         </tr>
-                        
+                       
 
                           
                         <tr>
@@ -60,7 +59,7 @@
                             <td class="table_name_eth_title"><span id="ylq"></span></td>
                             <td class="table_name_eth_title"><span id="wlq"></span></td>
                         </tr>
-                                 
+                                  
                         
                     </table>
                 </div>
@@ -149,23 +148,23 @@
             if (typeof web3 !== 'undefined') {
                 web3 = new Web3(web3.currentProvider);
                 if (web3.currentProvider.isMetaMask == true) {
-                    $("#env").html("网页MetaMask使用中...");
+                    $("#env").html("Web page MetaMask in use...");
                 } else {
-                    $("#env").html("未使用网页MetaMask... ");
+                    $("#env").html("Not using page MetaMask...");
                 }
             } else {
-                $("#env").html("未提供WEB3通道，请检查您的设置...");
+                $("#env").html("The web page MetaMask is in use...");
             }
             web3.eth.getAccounts(function (err, accounts) {
                 if (accounts.length == 0) {
-                    $("#account").html("请解锁！");
+                    $("#account").html("Please unlock!");
                 } else {
                     $("#address").val(accounts[0]);
                     var address = accounts[0];
                     login(accounts[0]);
                     $.ajax({
                         type: "get",
-                        url:adminurl+ "/ajax/Ajax.ashx?action=Nodereward&address=" + address,
+                        url: adminurl + "/ajax/Ajax.ashx?action=Nodereward&address=" + address,
                         success: function (msg) {
                             msg = eval("(" + msg + ")");
                             $("#yj").html(msg.yj);
@@ -197,6 +196,6 @@
             });
         })
     </script>
-    <script src="JS/FT_zh.js"></script>
+    
 </body>
 </html>

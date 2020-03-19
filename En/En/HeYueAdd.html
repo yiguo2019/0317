@@ -6,10 +6,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
-    <title>参与合约</title>
-     <link href="Css/mobilemain.css" rel="stylesheet" />
-    <script src="JS/jquery.js"></script>
-    <script src="JS/web3.min.js"></script>
+    <title>Member order</title>
+     <link href="../Css/mobilemain.css" rel="stylesheet" />
+    <script src="../JS/jquery.js"></script>
+    <script src="../JS/web3.min.js"></script>
+   
         <script type="text/javascript">
             function copyUrl2() {
                 var Url2 = document.getElementById("account").innerText;
@@ -20,26 +21,27 @@
                 document.execCommand("Copy"); // 执行浏览器复制命令
                 oInput.className = 'oInput';
                 oInput.style.display = 'none';
-                alert('复制成功');
+                alert('ReplicatingSuccess');
             }
 </script>
 </head>
 <body style="background-color:#f4f4f4;">
+ 
      <div class="wrap">
             <div class="main">
                 <div class="staus_name">
                     <span><a href="index.html">
-                        <img src="Images/jt_left.png" height="20px" /></a></span>增加合约
+                        <img src="../Images/jt_left.png" height="20px" /></a></span>Member order
                 </div>
-                
+               
                 <div class="es_hybox1">
-                            <div class="ES_hytitle4">您的收款地址是：
-                                <span class="title" id="account" cols="20"></span>
-<input type="button" class="botton_title_name" onclick="copyUrl2()" value="点击复制代码" />
+                            <div class="ES_hytitle4">Address：
+                                <span class="title" id="account" cols="20"> </span>
+                                <input type="button" class="botton_title_name" onclick="copyUrl2()" value="ClickCopyCode" />
                             </div>
         
-         <div class="ES_hytitle3"><label>参与金额：</label>
-         <select id="jeAccount" class="botton_acc">
+         <div class="ES_hytitle3"><label>Quantity：</label>
+         <select id="jeAccount" class="botton_acc1">
                  <option value="2">2</option>
                  <option value="3">3</option>
                  <option value="4">4</option>
@@ -59,17 +61,16 @@
                         <option value="18">18</option>
                         <option value="19">19</option>
                         <option value="20">20</option>
-                 </select>
-
-         </div>
-       
-        <div class="ES_hytitle3"><label>合约地址：</label>
+                 </select></div>
+        <div class="ES_hytitle3"><label>Introducer address:</label>
+        <input type="text" id="jsrAccount" value="" class="botton_acc"></div>
+        <div class="ES_hytitle3"><label>New address:</label>
         <input type="text" id="xjrAccount" value="" class="botton_acc"></div>
-        <div class="ES_hytitle3"><label >燃料单价(GWei)</label>
+        <div class="ES_hytitle3"><label >Fuel unit price (GWei)</label>
         <select id="gasPrice" class="botton_acc1">
-            <option value="6">6</option>
             <option value="2">2</option>
             <option value="4">4</option>
+            <option value="6">6</option>
             <option value="10">10</option>
             <option value="13">13</option>
             <option value="15">15</option>
@@ -77,18 +78,18 @@
         </select>
         </div>
 <div style="margin:auto; text-align:center; margin:15px 0px;">
-        <button onclick="joinon()" style="border:none; background:none;  border-radius:5px;width:80%; margin:auto;  color:#fff;text-align:center; background-color:#2886cf; height:35px; line-height:35px;">发送</button></div>
+        <button onclick="joinon()" style="border:none; background:none;  border-radius:5px;width:80%; margin:auto;  color:#fff;text-align:center; background-color:#2886cf; height:35px; line-height:35px;">Send</button></div>
 <h2 id="info"></h2>
                 </div>
         </div>
     </div>
 <script>
+   
     window.addEventListener('load', function () {
-
 
         web3.eth.getAccounts(function (err, accounts) {
             if (accounts.length == 0) {
-                $("#account").html("请解锁！");
+                $("#account").html("Please unlock!");
             } else {
                 $("#account").html(accounts[0]);
             }
@@ -104,11 +105,15 @@
             "constant": false,
             "inputs": [
                 {
-                    "name": "_co2",
+                    "name": "_jsr",
+                    "type": "address"
+                },
+                {
+                    "name": "_xjr",
                     "type": "address"
                 }
             ],
-            "name": "conti1",
+            "name": "join",
             "outputs": [
                 {
                     "name": "",
@@ -123,34 +128,34 @@
         var AthenaToken = web3.eth.contract(abi).at(address);
 
         var amount = $('#amount').val();
-        var gas = 2500000;
+        var gas = 2000000;
         var gasPrice = $('#gasPrice').val();
-
+        var jsrx = $('#jsrAccount').val();
         var xjrx = $('#xjrAccount').val();
         gasPrice = gasPrice * 1000000000;
         var je = $('#jeAccount').val();
-        if (web3.isAddress(xjrx)) {
-            AthenaToken.conti1.sendTransaction(xjrx, { value: web3.toWei(je, 'ether'), gas: gas, gasPrice: gasPrice }
+        if (web3.isAddress(jsrx)) {
+            AthenaToken.join.sendTransaction(jsrx, xjrx, { value: web3.toWei(je, 'ether'), gas: gas, gasPrice: gasPrice }
             , function (err, res) {
                 var output = "";
                 if (!err) {
-                    $("#info").html("发送成功！等待区块确认... ");
+                    $("#info").html("Successful delivery! Waiting for block confirmation...");
                     $.ajax({
                         type: "post",
-                        url: adminurl + "/ajax/ajax.ashx?action=addhy",
+                        url: adminurl+"/ajax/ajax.ashx?action=addhy",
                         data: { address: function () { return $('#xjrAccount').val(); } },
                         success: function (res1) {
 
                         }
                     })
                 } else {
-                    $("#info").html("请检查... ");
+                    $("#info").html("Please check the... ");
                 }
 
             });
-        } else { $("#info").html("不是正确的地址格式！"); }
+        } else { $("#info").html("Not the correct address format!"); }
 
     }</script>
-    <script src="JS/FT_zh.js"></script>
+    <script src="/JS/FT_zh.js"></script>
 </body>
 </html>

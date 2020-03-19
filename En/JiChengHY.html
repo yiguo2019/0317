@@ -7,22 +7,22 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="format-detection" content="telephone=no" />
     <title>参与合约</title>
-     <link href="../Css/mobilemain.css" rel="stylesheet" />
-    <script src="../JS/jquery.js"></script>
-    <script src="../JS/public.js"></script>
-    <script src="../JS/web3.min.js"></script>
-                <script type="text/javascript">
-                    function copyUrl2() {
-                        var Url2 = document.getElementById("account").innerText;
-                        var oInput = document.createElement('input');
-                        oInput.value = Url2;
-                        document.body.appendChild(oInput);
-                        oInput.select(); // 选择对象
-                        document.execCommand("Copy"); // 执行浏览器复制命令
-                        oInput.className = 'oInput';
-                        oInput.style.display = 'none';
-                        alert('ReplicatingSuccess');
-                    }
+     <link href="Css/mobilemain.css" rel="stylesheet" />
+    <script src="JS/jquery.js"></script>
+    <script src="JS/public.js"></script>
+    <script src="JS/web3.min.js"></script>
+            <script type="text/javascript">
+                function copyUrl2() {
+                    var Url2 = document.getElementById("account").innerText;
+                    var oInput = document.createElement('input');
+                    oInput.value = Url2;
+                    document.body.appendChild(oInput);
+                    oInput.select(); // 选择对象
+                    document.execCommand("Copy"); // 执行浏览器复制命令
+                    oInput.className = 'oInput';
+                    oInput.style.display = 'none';
+                    alert('复制成功');
+                }
 </script>
 </head>
 <body style="background-color:#f4f4f4;">
@@ -31,25 +31,25 @@
             <div class="main">
                 <div class="staus_name">
                     <span><a href="index.html">
-                        <img src="../Images/jt_left.png" height="20px" /></a></span>Member renewal
+                        <img src="Images/jt_left.png" height="20px" /></a></span>会员续单
                 </div>
                 
                 <div class="es_hybox1">
-                            <div class="ES_hytitle4">Your address：
-                                 <span class="title" id="account" cols="20"></span>
-                                <input type="button" class="botton_title_name" onclick="copyUrl2()" value="ClickCopyCode" />
+                            <div class="ES_hytitle4">您的收款地址是：
+                                <span class="title" id="account" cols="20"></span>
+                                <input type="button" class="botton_title_name" onclick="copyUrl2()" value="点击复制代码" />
                             </div>
         
-         <div class="ES_hytitle3"><label>amount：</label>
-        <input type="text" id="jeAccount" value="" readonly class="botton_acc"></div>
-       
-        <div class="ES_hytitle3"><label>address：</label>
+         <div class="ES_hytitle3"><label>参与金额：</label>
+        <input type="text" id="jeAccount" value=""  class="botton_acc"></div>
+        
+        <div class="ES_hytitle3"><label>续单地址：</label>
         <input type="text" id="xjrAccount" value="" readonly class="botton_acc"></div>
-        <div class="ES_hytitle3"><label >Fuel unit price(GWei)</label>
+        <div class="ES_hytitle3"><label >燃料单价(GWei)</label>
         <select id="gasPrice" class="botton_acc1">
+            <option value="6">6</option>
             <option value="2">2</option>
             <option value="4">4</option>
-            <option value="6">6</option>
             <option value="10">10</option>
             <option value="13">13</option>
             <option value="15">15</option>
@@ -70,16 +70,17 @@
 
         web3.eth.getAccounts(function (err, accounts) {
             if (accounts.length == 0) {
-                $("#account").html("Please unlock！");
+                $("#account").html("请解锁！");
             } else {
                 $("#account").html(accounts[0]);
+                var address = accounts[0];
                 login(accounts[0]);
 
                 var id = Request("id");
 
                 $.ajax({
                     type: "get",
-                    url: adminurl+"/ajax/Ajax.ashx?action=JiChengHY&id=" + id + "&address=" + address,
+                    url: adminurl + "/ajax/Ajax.ashx?action=JiChengHY&id=" + id + "&address=" + address,
                     success: function (msg) {
                         var msg = eval("(" + msg + ")");
                         $("#jeAccount").val(msg.price);
@@ -94,36 +95,80 @@
 </script>
 
 <script>
+    var abi = [{
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_ywbh3",
+                "type": "uint32"
+            },
+            {
+                "name": "_co3",
+                "type": "address"
+            }
+        ],
+        "name": "conti2",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_ad1",
+                "type": "address"
+            }
+        ],
+        "name": "cMber",
+        "outputs": [
+            {
+                "name": "_MsBuTotal",
+                "type": "uint32"
+            },
+            {
+                "name": "_MsSon",
+                "type": "uint32"
+            },
+            {
+                "name": "_MsBuActTime",
+                "type": "uint256"
+            },
+            {
+                "name": "_MsBuAmo",
+                "type": "uint256"
+            },
+            {
+                "name": "_MsBuReN",
+                "type": "uint256"
+            },
+            {
+                "name": "_MsBuSta1",
+                "type": "uint256"
+            },
+            {
+                "name": "_MsBuSta2",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    }];
+    var address = "0x34848f3c3934733d3ebc6f82489346592566c777";
+    var AthenaToken = web3.eth.contract(abi).at(address);
+
     function joinon() {
 
-        var abi = [{
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_ywbh3",
-                    "type": "uint32"
-                },
-                {
-                    "name": "_co3",
-                    "type": "address"
-                }
-            ],
-            "name": "conti2",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "payable": true,
-            "stateMutability": "payable",
-            "type": "function"
-        }];
-        var address = "0x34848f3c3934733d3ebc6f82489346592566c777";
-        var AthenaToken = web3.eth.contract(abi).at(address);
+
 
         var amount = $('#amount').val();
-        var gas = 2000000;
+        var gas = 2500000;
         var gasPrice = $('#gasPrice').val();
 
         var xjrx = $('#xjrAccount').val();
@@ -136,25 +181,25 @@
                 , function (err, res) {
                     var output = "";
                     if (!err) {
-                        $("#info").html("Successful delivery! Waiting for block confirmation...");
+                        $("#info").html("发送成功！等待区块确认... ");
                         $.ajax({
                             type: "post",
-                            url:adminurl+ "/ajax/ajax.ashx?action=addhy",
+                            url: adminurl + "/ajax/ajax.ashx?action=addhy",
                             data: { address: function () { return $('#xjrAccount').val(); } },
                             success: function (res1) {
 
                             }
                         })
                     } else {
-                        $("#info").html("Please check the... ");
+                        $("#info").html("请检查... ");
                     }
 
                 });
-            } else { $("#info").html("Not the correct address format!"); }
+            } else { $("#info").html("不是正确的地址格式！"); }
         }
 
     }</script>
-    
+    <script src="JS/FT_zh.js"></script>
         </form>
 </body>
 </html>
